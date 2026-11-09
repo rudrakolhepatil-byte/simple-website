@@ -1,0 +1,1270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Country History</title>
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap");
+
+    :root {
+      color-scheme: light;
+      --ink: #172d2b;
+      --muted: #687773;
+      --paper: #f4f2e9;
+      --surface: #fffdf7;
+      --green: #1f6954;
+      --green-dark: #164b3d;
+      --line: #dce2d9;
+      --gold: #d6aa5a;
+      --error: #a63f32;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      background:
+        radial-gradient(ellipse at 92% 0%, rgba(214, 170, 90, .19), transparent 34rem),
+        radial-gradient(ellipse at 0% 40%, rgba(31, 105, 84, .06), transparent 30rem),
+        var(--paper);
+      font-family: "DM Sans", sans-serif;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px clamp(20px, 6vw, 84px);
+      border-bottom: 1px solid rgba(23, 45, 43, .1);
+      background: rgba(255, 253, 247, .8);
+      backdrop-filter: blur(14px);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .brand-mark {
+      display: grid;
+      width: 38px;
+      height: 38px;
+      place-items: center;
+      border-radius: 50%;
+      color: white;
+      background: linear-gradient(145deg, #39856a, var(--green-dark));
+      font-family: Georgia, serif;
+      font-size: 20px;
+      box-shadow: 0 5px 14px rgba(22, 75, 61, .2);
+    }
+
+    .header-note {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    main {
+      width: min(1180px, calc(100% - 48px));
+      margin: 0 auto;
+      padding: clamp(48px, 8vw, 88px) 0 76px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(360px, .95fr);
+      align-items: center;
+      gap: clamp(36px, 7vw, 90px);
+      margin-bottom: 58px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      margin: 0 0 18px;
+      color: var(--green);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      width: 23px;
+      height: 1px;
+      background: var(--gold);
+      content: "";
+    }
+
+    h1 {
+      max-width: 720px;
+      margin: 0;
+      font-family: "Playfair Display", Georgia, serif;
+      font-size: clamp(48px, 7vw, 82px);
+      line-height: 1.01;
+      letter-spacing: -.045em;
+    }
+
+    h1 em {
+      color: var(--green);
+      font-weight: 600;
+    }
+
+    .intro {
+      max-width: 590px;
+      margin: 22px 0 0;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.8;
+    }
+
+    .hero-art {
+      position: relative;
+      display: grid;
+      min-height: 440px;
+      place-items: center;
+      overflow: hidden;
+      isolation: isolate;
+      border: 1px solid rgba(33, 107, 84, .13);
+      border-radius: 8px;
+      background:
+        radial-gradient(ellipse at 52% 43%, rgba(255, 253, 247, .98), transparent 43%),
+        repeating-linear-gradient(0deg, transparent 0 39px, rgba(33, 107, 84, .065) 40px),
+        repeating-linear-gradient(90deg, transparent 0 39px, rgba(33, 107, 84, .065) 40px),
+        linear-gradient(145deg, #e8ecdf, #f0eadb);
+      box-shadow: 0 26px 70px rgba(29, 58, 48, .1);
+      perspective: 1000px;
+    }
+
+    .orbit {
+      position: absolute;
+      width: 88%;
+      aspect-ratio: 1;
+      border: 1px solid rgba(33, 107, 84, .16);
+      border-radius: 50%;
+      transform: rotate(-20deg) scaleY(.68);
+      animation: orbit-turn 42s linear infinite;
+    }
+
+    .orbit::before,
+    .orbit::after {
+      position: absolute;
+      inset: 5%;
+      border: 1px solid rgba(33, 107, 84, .12);
+      border-radius: 50%;
+      content: "";
+      transform: rotate(-34deg) scaleX(.48);
+    }
+
+    .orbit::after {
+      transform: rotate(34deg) scaleX(.48);
+    }
+
+    .globe {
+      position: relative;
+      width: min(65%, 300px);
+      aspect-ratio: 1;
+      overflow: hidden;
+      border: 1px solid rgba(23, 77, 61, .36);
+      border-radius: 50%;
+      background:
+        radial-gradient(ellipse at 28% 20%, rgba(255, 255, 255, .56), transparent 35%),
+        radial-gradient(ellipse at 74% 78%, rgba(8, 39, 31, .76), transparent 58%),
+        linear-gradient(135deg, #6dad8e, #287459 58%, #174d3d);
+      box-shadow:
+        0 34px 70px rgba(24, 51, 46, .28),
+        0 0 0 10px rgba(255, 253, 247, .45),
+        inset -22px -16px 38px rgba(15, 47, 38, .28);
+      transform-style: preserve-3d;
+      animation: globe-arrive .8s ease-out both, globe-float 7s ease-in-out 1s infinite;
+    }
+
+    .globe::before {
+      position: absolute;
+      z-index: 2;
+      inset: 0 22%;
+      border: 1px solid rgba(255, 255, 255, .2);
+      border-radius: 50%;
+      content: "";
+      transform: rotate(-17deg);
+    }
+
+    .globe::after {
+      position: absolute;
+      z-index: 3;
+      inset: 0;
+      border-radius: inherit;
+      background:
+        linear-gradient(115deg, rgba(255, 255, 255, .24), transparent 35%),
+        radial-gradient(ellipse at 35% 24%, transparent 36%, rgba(8, 39, 31, .12) 100%);
+      content: "";
+      pointer-events: none;
+    }
+
+    .globe-map {
+      position: absolute;
+      z-index: 1;
+      top: 0;
+      left: 0;
+      width: 200%;
+      height: 100%;
+      animation: globe-map-drift 36s linear infinite;
+    }
+
+    @keyframes globe-map-drift {
+      to { transform: translateX(-50%); }
+    }
+
+    .globe-map path {
+      fill: #e5c77f;
+      stroke: rgba(164, 124, 47, .5);
+      stroke-width: 1.1;
+      stroke-linejoin: round;
+    }
+
+    .orbit-point {
+      position: absolute;
+      z-index: 4;
+      width: 8px;
+      height: 8px;
+      border: 2px solid #fffefa;
+      border-radius: 50%;
+      background: var(--gold);
+      box-shadow: 0 0 0 4px rgba(212, 166, 78, .2);
+    }
+
+    .orbit-point-one {
+      top: 22%;
+      right: 16%;
+    }
+
+    .orbit-point-two {
+      bottom: 20%;
+      left: 15%;
+      width: 6px;
+      height: 6px;
+    }
+
+    .map-label {
+      position: absolute;
+      right: 18px;
+      bottom: 18px;
+      left: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding-top: 13px;
+      border-top: 1px solid rgba(33, 107, 84, .2);
+      color: var(--green-dark);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .map-label span:last-child {
+      color: var(--muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    @keyframes globe-arrive {
+      from { opacity: 0; scale: .96; }
+      to { opacity: 1; scale: 1; }
+    }
+
+    .art-stamp {
+      position: absolute;
+      z-index: 5;
+      top: 28px;
+      left: 28px;
+      display: grid;
+      width: 66px;
+      height: 66px;
+      place-items: center;
+      border: 1px solid rgba(31, 105, 84, .2);
+      border-radius: 50%;
+      color: var(--green);
+      background: rgba(255, 253, 247, .72);
+      font-family: "Playfair Display", Georgia, serif;
+      font-size: 12px;
+      line-height: 1.2;
+      text-align: center;
+      transform: rotate(-12deg);
+    }
+
+    .art-caption {
+      position: absolute;
+      z-index: 5;
+      top: 34px;
+      right: 28px;
+      color: rgba(22, 75, 61, .68);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      writing-mode: vertical-rl;
+    }
+
+    @keyframes globe-float {
+      0%, 100% { translate: 0 0; }
+      50% { translate: 0 -9px; }
+    }
+
+    @keyframes orbit-turn {
+      to { rotate: 360deg; }
+    }
+
+    form {
+      display: flex;
+      gap: 10px;
+    }
+
+    .search-panel {
+      position: relative;
+      padding: clamp(22px, 4vw, 36px);
+      border: 1px solid rgba(31, 105, 84, .13);
+      border-radius: 8px;
+      background: rgba(255, 253, 247, .84);
+      box-shadow: 0 18px 50px rgba(29, 58, 48, .055);
+    }
+
+    .search-heading {
+      margin: 0 0 16px;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+    }
+
+    input {
+      flex: 1;
+      min-width: 0;
+      height: 58px;
+      padding: 0 19px;
+      border: 1px solid #c9d3ca;
+      border-radius: 5px;
+      outline: none;
+      color: var(--ink);
+      background: var(--surface);
+      font: inherit;
+      font-size: 16px;
+      transition: border-color .2s ease, box-shadow .2s ease;
+    }
+
+    input:focus {
+      border-color: var(--green);
+      box-shadow: 0 0 0 4px rgba(33, 107, 84, .12);
+    }
+
+    button {
+      min-height: 58px;
+      padding: 0 25px;
+      border: 0;
+      border-radius: 5px;
+      color: white;
+      background: linear-gradient(135deg, #287a60, var(--green-dark));
+      cursor: pointer;
+      font: inherit;
+      font-weight: 700;
+      box-shadow: 0 7px 16px rgba(22, 75, 61, .15);
+      transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+    }
+
+    button:hover {
+      background: var(--green-dark);
+      box-shadow: 0 9px 21px rgba(22, 75, 61, .22);
+      transform: translateY(-1px);
+    }
+    button:disabled { opacity: .65; cursor: wait; }
+    button:focus-visible,
+    a:focus-visible {
+      outline: 3px solid rgba(212, 166, 78, .75);
+      outline-offset: 3px;
+    }
+
+    .examples {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      margin-top: 16px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .examples button {
+      min-height: 0;
+      padding: 7px 12px;
+      border: 1px solid rgba(31, 105, 84, .17);
+      border-radius: 99px;
+      color: var(--green-dark);
+      background: #f6f7f0;
+      font-size: 13px;
+      font-weight: 600;
+      box-shadow: none;
+    }
+
+    .examples button:hover {
+      background: #eaf0e9;
+      box-shadow: none;
+      transform: translateY(-1px);
+    }
+
+    #status {
+      min-height: 24px;
+      margin: 14px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    #status.error { color: var(--error); }
+
+    .models-section {
+      margin: 76px 0 58px;
+    }
+
+    .section-topline {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 22px;
+      margin-bottom: 25px;
+    }
+
+    .section-kicker {
+      margin: 0 0 9px;
+      color: var(--green);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+
+    .models-section h2 {
+      margin: 0;
+      font-family: "Playfair Display", Georgia, serif;
+      font-size: clamp(29px, 4vw, 42px);
+      font-weight: 600;
+      letter-spacing: -.025em;
+      line-height: 1.15;
+    }
+
+    .section-note {
+      max-width: 270px;
+      margin: 0 0 3px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .model-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .model-card {
+      display: block;
+      min-width: 0;
+      overflow: hidden;
+      border: 1px solid rgba(31, 105, 84, .12);
+      border-radius: 7px;
+      background: rgba(255, 253, 247, .8);
+      box-shadow: 0 12px 34px rgba(29, 58, 48, .04);
+      transition: transform .25s ease, box-shadow .25s ease;
+    }
+
+    .model-card:hover {
+      box-shadow: 0 20px 44px rgba(29, 58, 48, .1);
+      transform: translateY(-4px);
+    }
+
+    .model-stage {
+      position: relative;
+      display: grid;
+      height: 190px;
+      place-items: center;
+      overflow: hidden;
+      background:
+        radial-gradient(ellipse at 50% 72%, rgba(214, 170, 90, .16), transparent 38%),
+        linear-gradient(145deg, #eef0e6, #e7eadf);
+      perspective: 700px;
+    }
+
+    .model-stage::after {
+      position: absolute;
+      right: 14%;
+      bottom: 24px;
+      left: 14%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(31, 105, 84, .18), transparent);
+      content: "";
+    }
+
+    .model-index {
+      position: absolute;
+      top: 15px;
+      left: 16px;
+      color: rgba(22, 75, 61, .55);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .13em;
+    }
+
+    .model-copy {
+      padding: 17px 19px 20px;
+    }
+
+    .model-copy h3 {
+      margin: 0 0 6px;
+      font-family: "Playfair Display", Georgia, serif;
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    .model-copy p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .mini-globe {
+      position: relative;
+      width: 112px;
+      aspect-ratio: 1;
+      border: 1px solid rgba(23, 77, 61, .35);
+      border-radius: 50%;
+      background:
+        radial-gradient(ellipse at 30% 22%, rgba(255, 255, 255, .7), transparent 35%),
+        radial-gradient(ellipse at 72% 75%, rgba(13, 54, 41, .55), transparent 60%),
+        linear-gradient(130deg, #79ad8a, #25684e 68%, #174d3d);
+      box-shadow: 0 19px 25px rgba(24, 51, 46, .2), inset -12px -8px 17px rgba(8, 39, 31, .2);
+      transform: rotateX(-12deg) rotateY(-24deg);
+      transform-style: preserve-3d;
+      animation: model-float 5.5s ease-in-out infinite;
+    }
+
+    .mini-globe::before,
+    .mini-globe::after {
+      position: absolute;
+      inset: 0 25%;
+      border: 1px solid rgba(255, 255, 255, .34);
+      border-radius: 50%;
+      content: "";
+      transform: rotateY(38deg);
+    }
+
+    .mini-globe::after {
+      inset: 25% 0;
+      transform: rotateX(58deg);
+    }
+
+    .pyramid {
+      position: relative;
+      width: 130px;
+      height: 110px;
+      filter: drop-shadow(0 17px 12px rgba(83, 62, 32, .18));
+      transform: rotateX(8deg) rotateY(-18deg);
+      transform-style: preserve-3d;
+      animation: model-float 6s ease-in-out -.8s infinite;
+    }
+
+    .pyramid-face {
+      position: absolute;
+      inset: 0;
+      clip-path: polygon(50% 0, 100% 100%, 0 100%);
+    }
+
+    .pyramid-face-front {
+      background:
+        repeating-linear-gradient(0deg, transparent 0 15px, rgba(111, 79, 38, .16) 16px 17px),
+        linear-gradient(110deg, #f0d59b, #c99a54);
+      clip-path: polygon(50% 0, 50% 100%, 0 100%);
+    }
+
+    .pyramid-face-side {
+      background:
+        repeating-linear-gradient(0deg, transparent 0 15px, rgba(86, 60, 30, .16) 16px 17px),
+        linear-gradient(250deg, #bd8743, #e2bd78);
+      clip-path: polygon(50% 0, 100% 100%, 50% 100%);
+    }
+
+    .column-model {
+      position: relative;
+      display: flex;
+      width: 90px;
+      height: 132px;
+      align-items: center;
+      flex-direction: column;
+      justify-content: end;
+      filter: drop-shadow(0 17px 12px rgba(60, 68, 54, .2));
+      transform: rotateX(8deg) rotateY(-18deg);
+      transform-style: preserve-3d;
+      animation: model-float 5.8s ease-in-out -.4s infinite;
+    }
+
+    .column-capital {
+      position: relative;
+      z-index: 2;
+      width: 76px;
+      height: 18px;
+      border: 1px solid rgba(83, 85, 68, .25);
+      border-radius: 3px 3px 1px 1px;
+      background: linear-gradient(90deg, #a6aa91, #eeead7 32%, #c7c8b1 73%, #929780);
+      box-shadow: 0 5px 0 #b4b59e;
+    }
+
+    .column-shaft {
+      position: relative;
+      width: 54px;
+      height: 82px;
+      margin-top: 4px;
+      background: repeating-linear-gradient(90deg, #9da28a 0 5px, #e8e4d1 6px 12px, #c4c6af 13px 16px);
+      box-shadow: inset 9px 0 10px rgba(255, 255, 255, .35), inset -8px 0 10px rgba(50, 58, 45, .14);
+    }
+
+    .column-base {
+      width: 76px;
+      height: 15px;
+      margin-top: 2px;
+      border: 1px solid rgba(83, 85, 68, .25);
+      border-radius: 2px;
+      background: linear-gradient(90deg, #9da28a, #e8e4d1 35%, #c4c6af 74%, #929780);
+      box-shadow: 0 5px 0 #aaa991;
+    }
+
+    @keyframes model-float {
+      0%, 100% { translate: 0 0; }
+      50% { translate: 0 -7px; }
+    }
+
+    #result {
+      display: none;
+      margin-top: 34px;
+      padding: clamp(22px, 5vw, 42px);
+      border: 1px solid var(--line);
+      border-top: 4px solid var(--gold);
+      border-radius: 5px;
+      background: var(--surface);
+      box-shadow: 0 16px 42px rgba(24, 51, 46, .06);
+    }
+
+    #result.visible { display: block; }
+
+    #result h2 {
+      margin: 0;
+      font-family: "Playfair Display", Georgia, serif;
+      font-size: clamp(30px, 5vw, 44px);
+      line-height: 1.15;
+    }
+
+    .source {
+      margin: 10px 0 26px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .source a, #result a { color: var(--green); }
+
+    .result-figure {
+      position: relative;
+      margin: 0 0 30px;
+      overflow: hidden;
+      border-radius: 4px;
+      background: #e7ece5;
+      aspect-ratio: 16 / 7;
+    }
+
+    .result-figure[hidden] { display: none; }
+
+    .result-figure img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .result-figure figcaption {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      padding: 30px 18px 14px;
+      color: white;
+      background: linear-gradient(transparent, rgba(15, 36, 30, .76));
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    #history-content {
+      font-size: 16px;
+      line-height: 1.8;
+      overflow-wrap: anywhere;
+    }
+
+    #history-content h2,
+    #history-content h3,
+    #history-content h4 {
+      margin: 28px 0 10px;
+      font-family: "Playfair Display", Georgia, serif;
+      line-height: 1.3;
+    }
+
+    #history-content h2 { font-size: 27px; }
+    #history-content h3 { font-size: 22px; }
+    #history-content h4 { font-size: 18px; }
+    #history-content p { margin: 0 0 16px; }
+    #history-content li { margin: 5px 0; }
+    #history-content table { max-width: 100%; border-collapse: collapse; }
+    #history-content th, #history-content td {
+      padding: 8px;
+      border: 1px solid var(--line);
+    }
+
+    footer {
+      padding: 25px 20px;
+      border-top: 1px solid rgba(23, 45, 43, .1);
+      color: var(--muted);
+      text-align: center;
+      font-size: 12px;
+      background: rgba(255, 253, 247, .55);
+    }
+
+    @media (max-width: 520px) {
+      header { padding-top: 15px; padding-bottom: 15px; }
+      .header-note { display: none; }
+      main { width: min(calc(100% - 32px), 600px); padding-top: 42px; }
+      .hero { grid-template-columns: 1fr; gap: 28px; margin-bottom: 34px; }
+      .hero-art { min-height: 310px; }
+      .globe { width: min(58%, 220px); }
+      .art-stamp { top: 18px; left: 18px; width: 56px; height: 56px; font-size: 10px; }
+      .art-caption { top: 24px; right: 17px; }
+      .search-panel { padding: 21px 17px; }
+      form { flex-direction: column; }
+      form button { width: 100%; }
+      #result { padding: 22px 18px; }
+      .models-section { margin: 54px 0 42px; }
+      .section-topline { align-items: start; flex-direction: column; gap: 10px; }
+      .section-note { max-width: 360px; }
+      .model-grid { grid-template-columns: 1fr; gap: 12px; }
+      .model-card { display: grid; grid-template-columns: 40% 1fr; align-items: center; }
+      .model-stage { height: 150px; }
+      .model-copy { padding: 15px; }
+      .mini-globe { width: 82px; }
+      .pyramid { width: 100px; height: 84px; }
+      .column-model { scale: .82; }
+    }
+
+    @media (min-width: 521px) and (max-width: 820px) {
+      main { width: min(calc(100% - 40px), 760px); }
+      .hero { grid-template-columns: 1fr .78fr; gap: 28px; }
+      .hero-art { min-height: 350px; }
+      .model-stage { height: 155px; }
+      .model-copy { padding: 15px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+
+    body {
+      background:
+        radial-gradient(ellipse at 92% 4%, rgba(255, 111, 125, .22), transparent 31rem),
+        radial-gradient(ellipse at 6% 45%, rgba(49, 183, 164, .14), transparent 34rem),
+        radial-gradient(ellipse at 75% 76%, rgba(220, 160, 72, .13), transparent 30rem),
+        var(--paper);
+    }
+    header {
+      position: sticky;
+      z-index: 10;
+      top: 0;
+      border-bottom-color: rgba(255, 255, 255, .5);
+      background: rgba(255, 253, 247, .66);
+      box-shadow: 0 10px 30px rgba(33, 64, 52, .06);
+      backdrop-filter: blur(20px) saturate(145%);
+      -webkit-backdrop-filter: blur(20px) saturate(145%);
+    }
+    .brand-mark {
+      border-radius: 13px 50% 50% 50%;
+      color: #fffdf7;
+      background: linear-gradient(145deg, #ff8c79, #d65370 52%, #743e69);
+      box-shadow: 0 6px 18px rgba(197, 76, 99, .25), inset 0 1px rgba(255, 255, 255, .5);
+    }
+    .hero { gap: clamp(30px, 5vw, 68px); }
+    .eyebrow {
+      padding: 9px 13px;
+      border: 1px solid rgba(214, 104, 91, .2);
+      border-radius: 999px 999px 999px 4px;
+      color: #b64d4e;
+      background: rgba(255, 255, 255, .42);
+      box-shadow: 0 8px 22px rgba(181, 91, 81, .07);
+    }
+    .eyebrow::before { background: #e1a644; }
+    h1 {
+      font-size: clamp(54px, 7.7vw, 90px);
+      letter-spacing: -.06em;
+      text-shadow: 0 8px 34px rgba(189, 115, 70, .09);
+    }
+    h1 em {
+      color: #c34f5a;
+      text-shadow: 0 8px 28px rgba(195, 79, 90, .14);
+    }
+    .intro { color: #596c66; }
+    .hero-art {
+      border: 1px solid rgba(255, 255, 255, .68);
+      border-radius: 28px 28px 28px 7px;
+      background:
+        radial-gradient(ellipse at 52% 43%, rgba(255, 252, 239, .78), transparent 43%),
+        radial-gradient(ellipse at 78% 18%, rgba(244, 114, 119, .24), transparent 34%),
+        radial-gradient(ellipse at 16% 80%, rgba(74, 180, 157, .2), transparent 38%),
+        repeating-linear-gradient(0deg, transparent 0 39px, rgba(33, 107, 84, .08) 40px),
+        repeating-linear-gradient(90deg, transparent 0 39px, rgba(33, 107, 84, .08) 40px),
+        linear-gradient(145deg, #e8ecdf, #f7e4d3);
+      box-shadow: 0 30px 76px rgba(42, 73, 57, .16), inset 0 1px rgba(255, 255, 255, .75);
+    }
+    .orbit { border-color: rgba(196, 80, 93, .24); }
+    .orbit::before, .orbit::after { border-color: rgba(33, 107, 84, .18); }
+    .globe {
+      box-shadow:
+        0 34px 70px rgba(24, 51, 46, .3),
+        0 0 0 10px rgba(255, 249, 235, .55),
+        0 0 0 15px rgba(224, 156, 82, .22),
+        inset -22px -16px 38px rgba(15, 47, 38, .28);
+    }
+    .art-stamp {
+      border-color: rgba(255, 255, 255, .68);
+      color: #fffaf1;
+      background: linear-gradient(145deg, rgba(211, 91, 99, .84), rgba(137, 63, 94, .78));
+      box-shadow: 0 12px 28px rgba(128, 51, 71, .2), inset 0 1px rgba(255, 255, 255, .48);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    .art-caption { color: rgba(144, 62, 75, .8); }
+    .map-label {
+      border-top-color: rgba(192, 92, 82, .28);
+      color: #91414d;
+    }
+    .search-panel {
+      overflow: hidden;
+      border-color: rgba(255, 255, 255, .72);
+      border-radius: 22px 22px 22px 6px;
+      background: linear-gradient(130deg, rgba(255, 255, 255, .68), rgba(255, 252, 243, .5));
+      box-shadow: 0 22px 58px rgba(45, 74, 57, .1), inset 0 1px rgba(255, 255, 255, .9);
+      backdrop-filter: blur(24px) saturate(145%);
+      -webkit-backdrop-filter: blur(24px) saturate(145%);
+    }
+    .search-panel::after {
+      position: absolute;
+      z-index: -1;
+      top: -70px;
+      right: -38px;
+      width: 190px;
+      height: 190px;
+      border: 1px solid rgba(216, 116, 99, .2);
+      border-radius: 50%;
+      content: "";
+      box-shadow: 0 0 0 18px rgba(216, 116, 99, .045), 0 0 0 38px rgba(216, 116, 99, .035);
+      pointer-events: none;
+    }
+    .search-heading { color: #9d4a50; }
+    input {
+      border-color: rgba(47, 99, 77, .22);
+      border-radius: 12px 12px 12px 4px;
+      background: rgba(255, 255, 255, .66);
+      box-shadow: inset 0 1px rgba(255, 255, 255, .88);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    button {
+      border-radius: 12px 12px 12px 4px;
+      background: linear-gradient(125deg, #238b70, #1c6955 55%, #78465f);
+      box-shadow: 0 9px 22px rgba(31, 105, 84, .2), inset 0 1px rgba(255, 255, 255, .3);
+    }
+    .examples button {
+      border-color: rgba(38, 112, 88, .2);
+      border-radius: 999px;
+      color: #275c4e;
+      background: rgba(255, 255, 255, .48);
+      backdrop-filter: blur(9px);
+      -webkit-backdrop-filter: blur(9px);
+    }
+    .examples button:hover { background: rgba(255, 255, 255, .82); }
+    #result {
+      border-color: rgba(255, 255, 255, .78);
+      border-top-color: #d76668;
+      border-radius: 7px 22px 22px 22px;
+      background: rgba(255, 253, 247, .66);
+      box-shadow: 0 24px 60px rgba(24, 51, 46, .11), inset 0 1px rgba(255, 255, 255, .86);
+      backdrop-filter: blur(22px) saturate(140%);
+      -webkit-backdrop-filter: blur(22px) saturate(140%);
+    }
+    .source a, #result a { color: #b44d5a; }
+    .result-figure { border-radius: 15px 15px 15px 4px; }
+    .models-section h2 { color: #243e36; }
+    .section-kicker { color: #ba5553; }
+    .model-card {
+      border-color: rgba(255, 255, 255, .72);
+      border-radius: 18px 18px 18px 5px;
+      background: rgba(255, 253, 247, .58);
+      box-shadow: 0 15px 38px rgba(29, 58, 48, .09), inset 0 1px rgba(255, 255, 255, .88);
+      backdrop-filter: blur(20px) saturate(135%);
+      -webkit-backdrop-filter: blur(20px) saturate(135%);
+    }
+    .model-card:nth-child(2) { border-radius: 5px 18px 18px 18px; }
+    .model-card:hover {
+      box-shadow: 0 23px 48px rgba(29, 58, 48, .15), inset 0 1px rgba(255, 255, 255, .9);
+      transform: translateY(-6px) rotate(-.4deg);
+    }
+    .model-card:nth-child(2):hover { transform: translateY(-6px) rotate(.4deg); }
+    .model-stage {
+      background:
+        radial-gradient(ellipse at 18% 20%, rgba(255, 255, 255, .8), transparent 28%),
+        radial-gradient(ellipse at 78% 80%, rgba(235, 111, 111, .2), transparent 40%),
+        linear-gradient(145deg, rgba(224, 239, 220, .8), rgba(247, 226, 204, .8));
+    }
+    footer {
+      border-top-color: rgba(193, 106, 94, .19);
+      background: rgba(255, 253, 247, .42);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+
+    @media (max-width: 820px) {
+      .hero-art { border-radius: 24px 24px 24px 6px; }
+    }
+    @media (max-width: 520px) {
+      header { backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
+      .search-panel { border-radius: 18px 18px 18px 5px; }
+      .model-card, .model-card:nth-child(2) { border-radius: 14px 14px 14px 4px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand"><span class="brand-mark">H</span> Atlas of Nations</div>
+    <span class="header-note">A living archive of our world</span>
+  </header>
+
+  <main>
+    <section class="hero" aria-labelledby="page-title">
+      <div>
+        <p class="eyebrow">Explore the past</p>
+        <h1 id="page-title">Every country has <em>a story.</em></h1>
+        <p class="intro">
+          Enter a country to discover its history, from early civilizations
+          to the events that shaped the nation today.
+        </p>
+      </div>
+      <div class="hero-art" role="img" aria-label="Illustrated globe representing the stories and connections of nations">
+        <div class="orbit" aria-hidden="true"></div>
+        <div class="globe" aria-hidden="true">
+          <svg class="globe-map" viewBox="0 0 600 300" aria-hidden="true">
+            <g id="world-map">
+            <path d="M47 68 57 54 75 49 83 39 101 42 108 51 126 54 136 67 130 78 118 82 113 94 101 97 96 111 83 115 78 129 68 126 64 113 54 106 50 92 41 85Z"/>
+            <path d="m103 124 13 4 10 15-3 15 8 13-4 17-11 10-4 20-10 20-8 21-7-6 1-17-9-13 4-17-7-13 5-15-5-13 9-15 4-15Z"/>
+            <path d="m139 71 10-9 17 3 8 8-8 8-13 1-5 10-12-4Z"/>
+            <path d="m176 69 17-9 20 5 14 9 18 2 18 12 12 5-3 12-15 4-7 9-15-2-7 9-13-4-8-10-12 4-7-10-12 2-7-10-9-4 7-10Z"/>
+            <path d="m196 111 13 4 8 12-5 15-8 10-7-13-8-10Z"/>
+            <path d="m217 127 15 3 10 9-6 8-12-5-8-8Z"/>
+            <path d="m157 125 19-8 20 5 12 14 5 19-8 22-7 23-14 22-11-4-6-19-12-13-5-19-9-12 4-15Z"/>
+            <path d="m223 195 14-8 19 3 12 10-4 13-14 8-16-4-10-11Z"/>
+            <path d="m57 39 8-10 12 2 4 8-10 6Z"/>
+            </g>
+            <use href="#world-map" x="300"></use>
+          </svg>
+        </div>
+        <span class="art-stamp" aria-hidden="true">SINCE<br>THE BEGINNING</span>
+        <span class="art-caption" aria-hidden="true">One world · many stories</span>
+        <span class="orbit-point orbit-point-one" aria-hidden="true"></span>
+        <span class="orbit-point orbit-point-two" aria-hidden="true"></span>
+        <div class="map-label" aria-hidden="true">
+          <span>Atlas of Nations</span>
+          <span>01 / 195</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="search-panel" aria-label="Explore a country's history">
+      <p class="search-heading">Begin your journey · choose a country</p>
+      <form id="search-form">
+        <input
+          id="country-input"
+          type="text"
+          placeholder="Type a country, such as Japan"
+          aria-label="Country name"
+          required
+        >
+        <button id="search-button" type="submit">Find its history <span aria-hidden="true">↗</span></button>
+      </form>
+
+      <div class="examples" aria-label="Example countries">
+        <span>Popular journeys</span>
+        <button type="button" data-country="Japan">Japan</button>
+        <button type="button" data-country="Egypt">Egypt</button>
+        <button type="button" data-country="Brazil">Brazil</button>
+        <button type="button" data-country="New Zealand">New Zealand</button>
+      </div>
+
+      <p id="status" role="status" aria-live="polite"></p>
+    </section>
+
+    <article id="result">
+      <h2 id="result-title"></h2>
+      <p class="source">History from <a id="source-link" target="_blank" rel="noopener noreferrer">Wikipedia</a></p>
+      <figure class="result-figure" id="result-figure" hidden>
+        <img id="result-image" alt="" loading="lazy">
+        <figcaption id="result-caption"></figcaption>
+      </figure>
+      <div id="history-content"></div>
+    </article>
+
+    <section class="models-section" id="stories" aria-labelledby="models-heading">
+      <div class="section-topline">
+        <div>
+          <p class="section-kicker">A world in perspective</p>
+          <h2 id="models-heading">Landmarks through time</h2>
+        </div>
+        <p class="section-note">From ancient wonders to the shape of our shared world, every landmark holds a story.</p>
+      </div>
+      <div class="model-grid">
+        <article class="model-card">
+          <div class="model-stage" aria-hidden="true">
+            <span class="model-index">01 / THE WORLD</span>
+            <div class="mini-globe"></div>
+          </div>
+          <div class="model-copy">
+            <h3>Connected worlds</h3>
+            <p>Follow the paths, people and ideas that crossed continents.</p>
+          </div>
+        </article>
+        <article class="model-card">
+          <div class="model-stage" aria-hidden="true">
+            <span class="model-index">02 / ANCIENT EGYPT</span>
+            <div class="pyramid">
+              <span class="pyramid-face pyramid-face-front"></span>
+              <span class="pyramid-face pyramid-face-side"></span>
+            </div>
+          </div>
+          <div class="model-copy">
+            <h3>Enduring wonders</h3>
+            <p>Explore the monuments that still inspire awe thousands of years later.</p>
+          </div>
+        </article>
+        <article class="model-card">
+          <div class="model-stage" aria-hidden="true">
+            <span class="model-index">03 / CLASSICAL ERA</span>
+            <div class="column-model">
+              <span class="column-capital"></span>
+              <span class="column-shaft"></span>
+              <span class="column-base"></span>
+            </div>
+          </div>
+          <div class="model-copy">
+            <h3>Ideas that remain</h3>
+            <p>See how ancient architecture and culture shaped the world today.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer>Historical text provided by Wikipedia contributors.<br>© Rudra Kolhe Patil · Created by rudrakolhepatil</footer>
+
+  <script>
+    const form = document.querySelector("#search-form");
+    const input = document.querySelector("#country-input");
+    const button = document.querySelector("#search-button");
+    const status = document.querySelector("#status");
+    const result = document.querySelector("#result");
+    const resultTitle = document.querySelector("#result-title");
+    const sourceLink = document.querySelector("#source-link");
+    const resultFigure = document.querySelector("#result-figure");
+    const resultImage = document.querySelector("#result-image");
+    const resultCaption = document.querySelector("#result-caption");
+    const historyContent = document.querySelector("#history-content");
+
+    const api = "https://en.wikipedia.org/w/api.php";
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      findHistory(input.value.trim());
+    });
+
+    document.querySelectorAll("[data-country]").forEach((example) => {
+      example.addEventListener("click", () => {
+        input.value = example.dataset.country;
+        findHistory(input.value);
+      });
+    });
+
+    async function requestWikipedia(params) {
+      const url = new URL(api);
+      for (const [key, value] of Object.entries(params)) {
+        url.searchParams.set(key, value);
+      }
+      url.searchParams.set("format", "json");
+      url.searchParams.set("origin", "*");
+      url.searchParams.set("redirects", "1");
+
+      const response = await fetch(url);
+      if (!response.ok) throw new Error("Wikipedia could not be reached.");
+      const data = await response.json();
+      if (data.error) throw new Error(data.error.info || "Page not found.");
+      return data.parse;
+    }
+
+    async function requestThumbnail(title) {
+      const url = new URL(api);
+      url.searchParams.set("action", "query");
+      url.searchParams.set("prop", "pageimages");
+      url.searchParams.set("piprop", "thumbnail");
+      url.searchParams.set("pithumbsize", "1600");
+      url.searchParams.set("titles", title);
+      url.searchParams.set("format", "json");
+      url.searchParams.set("origin", "*");
+
+      try {
+        const response = await fetch(url);
+        if (!response.ok) return null;
+        const data = await response.json();
+        const page = Object.values(data.query?.pages || {})[0];
+        const imageUrl = page?.thumbnail?.source;
+        if (!imageUrl) return null;
+        const image = new URL(imageUrl);
+        return image.protocol === "https:" &&
+          ["thumb.wikimedia.org", "upload.wikimedia.org"].includes(image.hostname)
+          ? image.href
+          : null;
+      } catch {
+        return null;
+      }
+    }
+
+    async function findHistory(country) {
+      if (!country) return;
+
+      button.disabled = true;
+      result.classList.remove("visible");
+      status.classList.remove("error");
+      status.textContent = "Looking up " + country + "...";
+      historyContent.replaceChildren();
+      resultFigure.hidden = true;
+      resultImage.removeAttribute("src");
+
+      try {
+        const page = await requestWikipedia({
+          action: "parse",
+          page: country,
+          prop: "sections"
+        });
+
+        const sections = page.sections || [];
+        const historySection = sections.find((section) =>
+          section.line.toLowerCase().includes("history")
+        );
+
+        const [details, thumbnail] = await Promise.all([
+          requestWikipedia({
+            action: "parse",
+            page: page.title,
+            prop: "text",
+            section: historySection?.index ?? 0
+          }),
+          requestThumbnail(page.title)
+        ]);
+
+        resultTitle.textContent = page.title;
+        sourceLink.href = "https://en.wikipedia.org/wiki/" +
+          encodeURIComponent(page.title.replaceAll(" ", "_"));
+
+        if (thumbnail) {
+          resultImage.src = thumbnail;
+          resultImage.alt = "Featured image from the " + page.title + " article";
+          resultCaption.textContent = "A visual introduction to " + page.title;
+          resultFigure.hidden = false;
+        }
+
+        addSafeWikipediaContent(details.text["*"]);
+        result.classList.add("visible");
+        status.textContent = historySection
+          ? ""
+          : "No dedicated history section was available; showing the article overview.";
+      } catch (error) {
+        status.classList.add("error");
+        status.textContent = error.message +
+          " Check the spelling or try another country name.";
+      } finally {
+        button.disabled = false;
+      }
+    }
+
+    function addSafeWikipediaContent(html) {
+      const parsed = new DOMParser().parseFromString(html, "text/html");
+      const allowedTags = new Set([
+        "P", "BR", "B", "STRONG", "I", "EM", "UL", "OL", "LI",
+        "H2", "H3", "H4", "BLOCKQUOTE", "TABLE", "THEAD", "TBODY",
+        "TR", "TH", "TD", "SUP", "SUB", "A"
+      ]);
+      const discardedClasses = new Set([
+        "hatnote", "mw-editsection", "metadata", "noprint", "navbox"
+      ]);
+
+      function clean(node) {
+        if (node.nodeType === Node.TEXT_NODE) {
+          return document.createTextNode(node.textContent);
+        }
+        if (node.nodeType !== Node.ELEMENT_NODE) {
+          return document.createDocumentFragment();
+        }
+
+        const tag = node.tagName;
+        if (["STYLE", "SCRIPT", "NOSCRIPT", "TEMPLATE"].includes(tag) ||
+            [...discardedClasses].some((className) => node.classList.contains(className))) {
+          return document.createDocumentFragment();
+        }
+
+        const container = allowedTags.has(tag)
+          ? document.createElement(tag.toLowerCase())
+          : document.createDocumentFragment();
+
+        if (tag === "A" && container instanceof HTMLAnchorElement) {
+          const href = node.getAttribute("href") || "";
+          if (href.startsWith("/wiki/")) {
+            container.href = "https://en.wikipedia.org" + href;
+            container.target = "_blank";
+            container.rel = "noopener noreferrer";
+          }
+        }
+
+        for (const child of node.childNodes) {
+          container.append(clean(child));
+        }
+        return container;
+      }
+
+      for (const child of parsed.body.childNodes) {
+        historyContent.append(clean(child));
+      }
+    }
+  </script>
+</body>
+</html>
